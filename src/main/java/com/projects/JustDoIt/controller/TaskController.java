@@ -25,7 +25,7 @@ public class TaskController {
 
     @GetMapping(path = "/tasks")
     public Iterable<Task> getTasks() {
-        return taskService.findAll();
+        return taskService.findAllTasks();
     }
 
     @PostMapping(path = "/tasks")
