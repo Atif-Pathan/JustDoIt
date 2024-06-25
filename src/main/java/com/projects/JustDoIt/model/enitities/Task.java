@@ -1,4 +1,4 @@
-package com.projects.JustDoIt.model;
+package com.projects.JustDoIt.model.enitities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

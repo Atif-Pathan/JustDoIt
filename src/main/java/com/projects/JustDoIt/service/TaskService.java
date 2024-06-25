@@ -1,25 +1,15 @@
 package com.projects.JustDoIt.service;
 
-import com.projects.JustDoIt.model.Task;
-import com.projects.JustDoIt.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.projects.JustDoIt.model.enitities.Task;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class TaskService {
+public interface TaskService {
 
-    private final TaskRepository taskRepository;
+    Task createTask(Task t);
+    Optional<Task> findATask(Long id);
+    Iterable<Task> getAllTasks();
 
-    @Autowired
-    public TaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
-
-    public Iterable<Task> findAllTasks() {
-        return taskRepository.findAll();
-    }
-
-    public Task create(Task t) {
-        return taskRepository.save(t);
-    }
 }
