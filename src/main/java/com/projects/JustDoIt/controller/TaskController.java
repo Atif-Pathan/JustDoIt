@@ -56,7 +56,8 @@ public class TaskController {
     public ResponseEntity<TaskDto> updateFullTask(
             @PathVariable("id") Long id,
             @RequestBody TaskDto taskDto) {
-        if(!taskService.isExists(id)){
+
+        if(taskService.isExists(id)){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         taskDto.setId(id);
@@ -65,7 +66,22 @@ public class TaskController {
         return new ResponseEntity<>(
                 taskMapper.mapTo(updatedTask),
                 HttpStatus.OK);
+    }
 
+    @PatchMapping(path = "/tasks/{id}")
+    public ResponseEntity<TaskDto> updatePartialTask(
+            @PathVariable("id") Long id,
+            @RequestBody TaskDto taskDto) {
+
+        if(taskService.isExists(id)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Task task = taskMapper.mapFrom(taskDto);
+        Task partiallyUpdatedTask = taskService.partialUpdate(id, task);
+        return new ResponseEntity<>(
+                taskMapper.mapTo(partiallyUpdatedTask),
+                HttpStatus.OK);
     }
 }
 

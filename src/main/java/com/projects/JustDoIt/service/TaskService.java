@@ -13,4 +13,5 @@ public interface TaskService {
     List<Task> findAll();
     Optional<Task> findOneTask(Long id);
     boolean isExists(Long id);
+    Task partialUpdate(Long id, Task task);
 }
