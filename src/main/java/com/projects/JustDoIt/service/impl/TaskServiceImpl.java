@@ -5,7 +5,10 @@ import com.projects.JustDoIt.repository.TaskRepository;
 import com.projects.JustDoIt.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -21,12 +24,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Optional<Task> findATask(Long id) {
-        return taskRepository.findById(id);
+    public List<Task> findAll() {
+        return StreamSupport.stream(taskRepository
+                    .findAll()
+                    .spliterator(),
+                    false)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Iterable<Task> getAllTasks() {
-        return taskRepository.findAll();
+    public Optional<Task> findOneTask(Long id) {
+        return taskRepository.findById(id);
     }
+
 }
