@@ -53,4 +53,9 @@ public class TaskServiceImpl implements TaskService {
         }).orElseThrow(() -> new RuntimeException("Task does not exist"));
     }
 
+    @Override
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
+
 }

@@ -83,5 +83,11 @@ public class TaskController {
                 taskMapper.mapTo(partiallyUpdatedTask),
                 HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/tasks/{id}")
+    public ResponseEntity deleteTask(@PathVariable("id") Long id) {
+        taskService.deleteTask(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
 
