@@ -2,6 +2,7 @@ package com.projects.JustDoIt.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.JustDoIt.TestDataUtil;
+import com.projects.JustDoIt.model.dto.TaskDto;
 import com.projects.JustDoIt.model.enitities.Task;
 import com.projects.JustDoIt.service.TaskService;
 import org.junit.jupiter.api.Test;
@@ -135,6 +136,62 @@ public class TaskControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.description").value("Nap at 3pm")
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.finished").value(false)
+        );
+    }
+
+    @Test
+    public void testThatUpdateTaskReturnsHttpStatus404WhenTaskNotFound() throws Exception {
+        TaskDto taskDto = TestDataUtil.createTestTaskDtoC();
+        String taskDtoJson = objectMapper.writeValueAsString(taskDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/tasks/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskDtoJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatUpdateTaskReturnsHttpStatus200WhenTaskFoundAndUpdated() throws Exception {
+        Task taskA = TestDataUtil.createTestTaskA();
+        Task savedTaskA = taskService.save(taskA);
+
+        TaskDto taskDto = TestDataUtil.createTestTaskDtoC();
+        String taskDtoJson = objectMapper.writeValueAsString(taskDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/tasks/" + savedTaskA.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskDtoJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testTaskFullUpdateUpdatesExistingTask() throws Exception {
+        // create a task and save it to the db
+        Task taskB = TestDataUtil.createTestTaskB();
+        Task savedTaskA = taskService.save(taskB);
+        // now get the task you want to update the existing task with
+        TaskDto taskDto = TestDataUtil.createTestTaskDtoC();
+        taskDto.setId(savedTaskA.getId()); // set id, though not sure if needed actually since we pass it through url anyways
+        String taskDtoUpdateJson = objectMapper.writeValueAsString(taskDto);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/tasks/" + savedTaskA.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskDtoUpdateJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedTaskA.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.title").value(taskDto.getTitle())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.description").value(taskDto.getDescription())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.finished").value(taskDto.getFinished())
         );
     }
 

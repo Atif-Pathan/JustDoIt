@@ -1,5 +1,6 @@
 package com.projects.JustDoIt;
 
+import com.projects.JustDoIt.model.dto.TaskDto;
 import com.projects.JustDoIt.model.enitities.Task;
 
 public class TestDataUtil {
@@ -31,4 +32,21 @@ public class TestDataUtil {
                 .finished(false)
                 .build();
     }
+
+    public static TaskDto createTestTaskDtoC() {
+        return TaskDto.builder()
+                .title("Nap")
+                .description("Nap at 3pm")
+                .finished(false)
+                .build();
+    }
+
+    public static TaskDto createTestTaskDtoB() {
+        return TaskDto.builder()
+                .title("Morning Routine")
+                .description("Wash Face, Brush Teeth & Go to the washroom")
+                .finished(true)
+                .build();
+    }
+
 }
