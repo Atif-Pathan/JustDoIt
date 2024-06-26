@@ -236,5 +236,30 @@ public class TaskControllerIntegrationTests {
                 MockMvcResultMatchers.jsonPath("$.finished").value(taskDtoB.getFinished())
         );
     }
+
+    @Test
+    public void testThatDeleteTaskReturnsHttpStatus204() throws Exception {
+        Task taskB = TestDataUtil.createTestTaskB();
+        Task savedTaskB = taskService.save(taskB);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/tasks/" + savedTaskB.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    // assuming here that deleting something that doesnt exisit will also return no content since the end result is same
+    // regardless of if we delete existing or no exising, they are no there any more after DELTE
+    @Test
+    public void testThatDeleteTaskReturnsHttpStatus204EvenWithNonExistingTask() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/tasks/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }
 
