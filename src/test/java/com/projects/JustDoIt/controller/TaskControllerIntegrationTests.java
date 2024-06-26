@@ -195,5 +195,46 @@ public class TaskControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatPartialUpdateOnExistingTaskReturnsHttpStatus200() throws Exception {
+        Task taskB = TestDataUtil.createTestTaskB();
+        Task savedTaskB = taskService.save(taskB);
+
+        TaskDto taskDtoB = TestDataUtil.createTestTaskDtoB();
+        taskDtoB.setTitle("UPDATED TASK TITLE");
+        String taskDtoJson = objectMapper.writeValueAsString(taskDtoB);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/tasks/" + savedTaskB.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskDtoJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testPartialUpdateOnExistingTaskReturnsUpdatedTask() throws Exception {
+        Task taskB = TestDataUtil.createTestTaskB();
+        Task savedTaskB = taskService.save(taskB);
+
+        TaskDto taskDtoB = TestDataUtil.createTestTaskDtoB();
+        taskDtoB.setTitle("UPDATED TASK TITLE");
+        String taskDtoJson = objectMapper.writeValueAsString(taskDtoB);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.patch("/tasks/" + savedTaskB.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskDtoJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedTaskB.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.title").value("UPDATED TASK TITLE")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.description").value(taskDtoB.getDescription())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.finished").value(taskDtoB.getFinished())
+        );
+    }
 }
 
