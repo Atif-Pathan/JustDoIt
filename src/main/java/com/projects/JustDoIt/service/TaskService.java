@@ -9,7 +9,8 @@ import java.util.Optional;
 @Service
 public interface TaskService {
 
-    Task createTask(Task t);
+    Task save(Task t);
     List<Task> findAll();
     Optional<Task> findOneTask(Long id);
+    boolean isExists(Long id);
 }

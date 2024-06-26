@@ -1,6 +1,5 @@
 package com.projects.JustDoIt.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.JustDoIt.TestDataUtil;
 import com.projects.JustDoIt.model.enitities.Task;
@@ -81,7 +80,7 @@ public class TaskControllerIntegrationTests {
     @Test
     public void testThatListTasksReturnsListOfTasks() throws Exception {
         Task taskA = TestDataUtil.createTestTaskA();
-        taskService.createTask(taskA);
+        taskService.save(taskA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks")
@@ -100,7 +99,7 @@ public class TaskControllerIntegrationTests {
     @Test
     public void testThatGetTaskReturnsHttpStatus200WhenTaskExists() throws Exception {
         Task taskA = TestDataUtil.createTestTaskA();
-        taskService.createTask(taskA);
+        taskService.save(taskA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/1")
@@ -123,7 +122,7 @@ public class TaskControllerIntegrationTests {
     @Test
     public void testThatGetTaskReturnsWhenATaskExists() throws Exception {
         Task taskC = TestDataUtil.createTestTaskC();
-        taskService.createTask(taskC);
+        taskService.save(taskC);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/1")

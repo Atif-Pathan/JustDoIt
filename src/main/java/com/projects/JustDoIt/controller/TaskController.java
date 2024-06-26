@@ -31,7 +31,7 @@ public class TaskController {
     @PostMapping(path = "/tasks")
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
         Task task = taskMapper.mapFrom(taskDto);
-        Task savedTask = taskService.createTask(task);
+        Task savedTask = taskService.save(task);
         return new ResponseEntity<>(taskMapper.mapTo(savedTask), HttpStatus.CREATED);
     }
 
@@ -50,6 +50,22 @@ public class TaskController {
             TaskDto taskDto = taskMapper.mapTo(taskEntity);
             return new ResponseEntity<>(taskDto, HttpStatus.OK); // response is ok if we found the task
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND)); // else return not found
+    }
+
+    @PutMapping(path = "/tasks/{id}")
+    public ResponseEntity<TaskDto> updateFullTask(
+            @PathVariable("id") Long id,
+            @RequestBody TaskDto taskDto) {
+        if(!taskService.isExists(id)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        taskDto.setId(id);
+        Task task = taskMapper.mapFrom(taskDto);
+        Task updatedTask = taskService.save(task);
+        return new ResponseEntity<>(
+                taskMapper.mapTo(updatedTask),
+                HttpStatus.OK);
+
     }
 }
 

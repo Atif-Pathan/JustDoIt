@@ -19,7 +19,7 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository = taskRepository;
     }
     @Override
-    public Task createTask(Task task) {
+    public Task save(Task task) {
         return taskRepository.save(task);
     }
 
@@ -35,6 +35,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<Task> findOneTask(Long id) {
         return taskRepository.findById(id);
+    }
+
+    @Override
+    public boolean isExists(Long id) {
+        return taskRepository.existsById(id);
     }
 
 }
