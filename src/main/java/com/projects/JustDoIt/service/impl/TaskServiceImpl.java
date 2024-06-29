@@ -3,6 +3,8 @@ package com.projects.JustDoIt.service.impl;
 import com.projects.JustDoIt.model.enitities.Task;
 import com.projects.JustDoIt.repository.TaskRepository;
 import com.projects.JustDoIt.service.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,11 @@ public class TaskServiceImpl implements TaskService {
                     .spliterator(),
                     false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Task> findAll(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     @Override
